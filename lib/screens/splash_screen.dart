@@ -21,6 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     final sp = context.read<SignInProvider>();
     super.initState();
+
     // create a timer of 2 seconds
     Timer(const Duration(seconds: 2), () {
       sp.isSignedIn == false

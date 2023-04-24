@@ -29,15 +29,22 @@ class SignInProvider extends ChangeNotifier {
   String? _imageUrl;
   String? get imageUrl => _imageUrl;
 
+  //checking user signed in on calling this provider
+  SignInProvider() {
+    checkSignInUser();
+  }
+
   Future checkSignInUser() async {
     final SharedPreferences s = await SharedPreferences.getInstance();
     _isSignedIn = s.getBool("signed_in") ?? false;
+
     notifyListeners();
   }
 
   Future setSignIn() async {
     final SharedPreferences s = await SharedPreferences.getInstance();
     s.setBool("signed_in", true);
+
     _isSignedIn = true;
     notifyListeners();
   }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:rest_api_crud/provider/internet_provider.dart';
 import 'package:rest_api_crud/provider/sign_in_provider.dart';
 import 'package:rest_api_crud/screens/splash_screen.dart';
+import 'package:rest_api_crud/utils/utils.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -20,6 +22,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: primaryColor,
+    ));
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -32,7 +37,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
-        theme: ThemeData.dark().copyWith(scaffoldBackgroundColor: Colors.white),
+        theme: ThemeData.light().copyWith(
+            scaffoldBackgroundColor: Colors.white, primaryColor: primaryColor),
         home: const SplashScreen(),
       ),
     );

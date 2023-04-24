@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+
+import 'package:rest_api_crud/screens/booking_screen.dart';
+import 'package:rest_api_crud/screens/show_bookings.dart';
+
+import '../screens/profile_screen.dart';
 
 nextScreen(context, page) {
   Navigator.push(context, MaterialPageRoute(builder: (context) => page));
@@ -28,10 +32,12 @@ void showSnackBar(context, message, color) {
   ));
 }
 
-imagePick(ImageSource imageSource) async {
-  ImagePicker imagePicker = ImagePicker();
-  XFile? image = await imagePicker.pickImage(source: imageSource);
-  if (image != null) {
-    return image.readAsBytes();
-  }
-}
+const Color primaryColor = Colors.black;
+const Color secondaryColor = Colors.grey;
+const Color mobileBackgroundColor = Colors.white;
+
+var homeScreenWidgets = [
+  const BookingScreen(),
+  const ShowBookingScreen(),
+  const ProfileScreen(),
+];
