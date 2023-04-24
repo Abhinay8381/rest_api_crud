@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "267511721144",
+    "project_id": "rest-api-crud-d39b7",
+    "storage_bucket": "rest-api-crud-d39b7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267511721144:android:f41e3cb6c07e946918584d",
+        "android_client_info": {
+          "package_name": "com.example.rest_api_crud"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "267511721144-vbh024k7ar2u9p7q7mvr66uaqlsc34b5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.rest_api_crud",
+            "certificate_hash": "a92363491269262fd2b57fd083c13f57eebb5ee0"
+          }
+        },
+        {
+          "client_id": "267511721144-rk6rhq0ofoip07f83aslrurcd7cr3ne7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4zUoQ2t4W9RGwqf8azRJ-GlMgfJMegSg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "267511721144-rk6rhq0ofoip07f83aslrurcd7cr3ne7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "267511721144-380scj89ckte6p5jsre57c9kl2tbcvcn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.restApiCrud"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
