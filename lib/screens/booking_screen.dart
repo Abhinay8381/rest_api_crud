@@ -1,7 +1,13 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:rest_api_crud/api%20functions/crud_functions.dart';
+import 'package:rest_api_crud/api%20functions/firestore_functions.dart';
+import 'package:rest_api_crud/models/booking_model.dart';
 import 'package:rest_api_crud/utils/utils.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import '../provider/internet_provider.dart';
+import '../provider/sign_in_provider.dart';
 
 class BookingScreen extends StatefulWidget {
   const BookingScreen({super.key});
@@ -13,11 +19,12 @@ class BookingScreen extends StatefulWidget {
 class _BookingScreenState extends State<BookingScreen> {
   DateTime checkInDate = DateTime.now();
   DateTime checkOutDate = DateTime.now().add(const Duration(days: 1));
-  int amount = 799;
+  int amount = 1299;
+  String roomType = "AC";
   final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
-  final RoundedLoadingButtonController googleController =
+  final RoundedLoadingButtonController bookingController =
       RoundedLoadingButtonController();
-  @override
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +48,7 @@ class _BookingScreenState extends State<BookingScreen> {
             ],
           ),
         ),
-        body: SafeArea(
+        body: SingleChildScrollView(
             child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           child: Column(
@@ -124,7 +131,7 @@ class _BookingScreenState extends State<BookingScreen> {
                 ),
               ),
               const SizedBox(
-                height: 30,
+                height: 20,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -140,8 +147,13 @@ class _BookingScreenState extends State<BookingScreen> {
                             "Check Out Date Should Be Greater Then Check in Date",
                             Colors.red);
                       } else {
-                        amount =
-                            checkOutDate.difference(checkInDate).inDays * 799;
+                        if (roomType == "AC") {
+                          amount = checkOutDate.difference(checkInDate).inDays *
+                              1299;
+                        } else {
+                          amount =
+                              checkOutDate.difference(checkInDate).inDays * 799;
+                        }
                       }
                     });
                   },
@@ -159,7 +171,9 @@ class _BookingScreenState extends State<BookingScreen> {
                             padding: const EdgeInsets.fromLTRB(15, 8, 15, 8),
                             child: Text.rich(TextSpan(children: [
                               TextSpan(
-                                text: DateFormat.yMMMd().format(checkInDate),
+                                text: checkInDate
+                                    .toIso8601String()
+                                    .substring(0, 10),
                                 style: const TextStyle(
                                     color: Colors.black, fontSize: 20),
                               ),
@@ -180,7 +194,7 @@ class _BookingScreenState extends State<BookingScreen> {
                 ),
               ),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -194,8 +208,13 @@ class _BookingScreenState extends State<BookingScreen> {
                           "Check Out Date Should Be Greater Then Check in Date",
                           Colors.red);
                     } else {
-                      amount =
-                          checkOutDate.difference(checkInDate).inDays * 799;
+                      if (roomType == "AC") {
+                        amount =
+                            checkOutDate.difference(checkInDate).inDays * 1299;
+                      } else {
+                        amount =
+                            checkOutDate.difference(checkInDate).inDays * 799;
+                      }
                     }
                   },
                   child: Container(
@@ -212,7 +231,9 @@ class _BookingScreenState extends State<BookingScreen> {
                             padding: const EdgeInsets.fromLTRB(15, 8, 15, 8),
                             child: Text.rich(TextSpan(children: [
                               TextSpan(
-                                text: DateFormat.yMMMd().format(checkOutDate),
+                                text: checkOutDate
+                                    .toIso8601String()
+                                    .substring(0, 10),
                                 style: const TextStyle(
                                     color: Colors.black, fontSize: 20),
                               ),
@@ -233,12 +254,89 @@ class _BookingScreenState extends State<BookingScreen> {
                 ),
               ),
               const SizedBox(
-                height: 20,
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 238, 235, 235),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: primaryColor, width: 2)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 3,
+                        child: RadioListTile(
+                          activeColor: Colors.black,
+                          title: const Text(
+                            'AC',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          value: 'AC',
+                          groupValue: roomType,
+                          onChanged: (value) {
+                            setState(() {
+                              roomType = value.toString();
+                              if (roomType == "AC") {
+                                amount = checkOutDate
+                                        .difference(checkInDate)
+                                        .inDays *
+                                    1299;
+                              } else {
+                                amount = checkOutDate
+                                        .difference(checkInDate)
+                                        .inDays *
+                                    799;
+                              }
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 2.1,
+                        child: RadioListTile(
+                          activeColor: Colors.black,
+                          title: const Text(
+                            'Non AC',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          value: 'Non AC',
+                          groupValue: roomType,
+                          onChanged: (value) {
+                            setState(() {
+                              roomType = value.toString();
+                              if (roomType == "AC") {
+                                amount = checkOutDate
+                                        .difference(checkInDate)
+                                        .inDays *
+                                    1299;
+                              } else {
+                                amount = checkOutDate
+                                        .difference(checkInDate)
+                                        .inDays *
+                                    799;
+                              }
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
               ),
               RoundedLoadingButton(
-                onPressed: () {},
-                controller: googleController,
-                successColor: Colors.green,
+                onPressed: () {
+                  createBooking();
+                },
+                controller: bookingController,
+                successColor: Colors.black,
                 width: MediaQuery.of(context).size.width * 0.80,
                 elevation: 0,
                 borderRadius: 25,
@@ -291,6 +389,42 @@ class _BookingScreenState extends State<BookingScreen> {
       setState(() {
         checkOutDate = picked;
       });
+    }
+  }
+
+  createBooking() async {
+    final sp = context.read<SignInProvider>();
+    final ip = context.read<InternetProvider>();
+    await ip.checkInternetConnection();
+
+    if (ip.hasInternet == false) {
+      // ignore: use_build_context_synchronously
+      showSnackBar(context, "Check your Internet connection", Colors.red);
+      bookingController.reset();
+    } else {
+      if (checkOutDate.difference(checkInDate).inDays < 0) {
+        amount = 0;
+        // ignore: use_build_context_synchronously
+        showSnackBar(context,
+            "Check Out Date Should Be Greater Then Check in Date", Colors.red);
+      } else {
+        BookingModel bookingModel = BookingModel(
+            isAC: roomType == "AC",
+            checkin: checkInDate.toIso8601String(),
+            checkout: checkOutDate.toIso8601String());
+        CrudFunctions().createBooking("", bookingModel).then((value) async {
+          if (value == "Something went wrong") {
+            showSnackBar(context, value, Colors.red);
+            bookingController.reset();
+          } else {
+            String id = ((jsonDecode(value))['data'])['_id'];
+            await Firestorefunctions().addID(id);
+            // ignore: use_build_context_synchronously
+            showSnackBar(context, "Booking Successful", Colors.green);
+            bookingController.success();
+          }
+        });
+      }
     }
   }
 }

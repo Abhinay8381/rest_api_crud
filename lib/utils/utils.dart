@@ -41,3 +41,9 @@ var homeScreenWidgets = [
   const ShowBookingScreen(),
   const ProfileScreen(),
 ];
+
+const textInputDecoration = InputDecoration(
+    border: InputBorder.none,
+    focusedBorder: InputBorder.none,
+    errorBorder: InputBorder.none,
+    enabledBorder: InputBorder.none);
