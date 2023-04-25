@@ -8,12 +8,16 @@ class CrudFunctions {
   var client = http.Client();
 
   //to get all the booking ids booked from you(get)
-  Future<dynamic> getBookingfromID(String api) async {
-    var url = Uri.parse(baseUrl + api);
-    var response = await client.get(url);
+  Future<dynamic> getBookingfromID(String id) async {
+    var url = Uri.parse("$baseUrl/$id");
+
+    var response =
+        await client.get(url, headers: {'accept': 'application/json'});
     if (response.statusCode == 200) {
       return response.body;
-    } else {}
+    } else {
+      return "Something went wrong";
+    }
   }
 
   // to create a new booking(post)

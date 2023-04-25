@@ -1,5 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:rest_api_crud/api%20functions/crud_functions.dart';
 import 'package:rest_api_crud/api%20functions/firestore_functions.dart';
@@ -7,7 +10,6 @@ import 'package:rest_api_crud/models/booking_model.dart';
 import 'package:rest_api_crud/utils/utils.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import '../provider/internet_provider.dart';
-import '../provider/sign_in_provider.dart';
 
 class BookingScreen extends StatefulWidget {
   const BookingScreen({super.key});
@@ -78,7 +80,7 @@ class _BookingScreenState extends State<BookingScreen> {
               const Padding(
                 padding: EdgeInsets.only(left: 10),
                 child: Text(
-                  " Hotel Restful Booker",
+                  " Hotel Bundelkhand Pride",
                   textAlign: TextAlign.left,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                 ),
@@ -171,9 +173,7 @@ class _BookingScreenState extends State<BookingScreen> {
                             padding: const EdgeInsets.fromLTRB(15, 8, 15, 8),
                             child: Text.rich(TextSpan(children: [
                               TextSpan(
-                                text: checkInDate
-                                    .toIso8601String()
-                                    .substring(0, 10),
+                                text: DateFormat.yMMMd().format(checkInDate),
                                 style: const TextStyle(
                                     color: Colors.black, fontSize: 20),
                               ),
@@ -231,9 +231,7 @@ class _BookingScreenState extends State<BookingScreen> {
                             padding: const EdgeInsets.fromLTRB(15, 8, 15, 8),
                             child: Text.rich(TextSpan(children: [
                               TextSpan(
-                                text: checkOutDate
-                                    .toIso8601String()
-                                    .substring(0, 10),
+                                text: DateFormat.yMMMd().format(checkInDate),
                                 style: const TextStyle(
                                     color: Colors.black, fontSize: 20),
                               ),
@@ -393,18 +391,16 @@ class _BookingScreenState extends State<BookingScreen> {
   }
 
   createBooking() async {
-    final sp = context.read<SignInProvider>();
     final ip = context.read<InternetProvider>();
     await ip.checkInternetConnection();
 
     if (ip.hasInternet == false) {
-      // ignore: use_build_context_synchronously
       showSnackBar(context, "Check your Internet connection", Colors.red);
       bookingController.reset();
     } else {
       if (checkOutDate.difference(checkInDate).inDays < 0) {
         amount = 0;
-        // ignore: use_build_context_synchronously
+
         showSnackBar(context,
             "Check Out Date Should Be Greater Then Check in Date", Colors.red);
       } else {
@@ -419,7 +415,6 @@ class _BookingScreenState extends State<BookingScreen> {
           } else {
             String id = ((jsonDecode(value))['data'])['_id'];
             await Firestorefunctions().addID(id);
-            // ignore: use_build_context_synchronously
             showSnackBar(context, "Booking Successful", Colors.green);
             bookingController.success();
           }

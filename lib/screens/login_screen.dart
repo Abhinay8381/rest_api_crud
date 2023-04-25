@@ -115,6 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
     await ip.checkInternetConnection();
 
     if (ip.hasInternet == false) {
+      // ignore: use_build_context_synchronously
       showSnackBar(context, "Check your Internet connection", Colors.red);
       googleController.reset();
     } else {

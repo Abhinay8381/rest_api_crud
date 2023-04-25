@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:rest_api_crud/provider/sign_in_provider.dart';
 
 import '../utils/utils.dart';
 
@@ -39,7 +37,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final sp = context.watch<SignInProvider>();
     return Scaffold(
       body: SafeArea(
         child: PageView(

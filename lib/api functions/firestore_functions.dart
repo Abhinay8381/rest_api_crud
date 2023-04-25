@@ -12,4 +12,12 @@ class Firestorefunctions {
       "BookingIDs": FieldValue.arrayUnion([id]),
     });
   }
+
+  Future<DocumentSnapshot> getIDs() async {
+    DocumentSnapshot documentSnapshot = await _firebaseFirestore
+        .collection("users")
+        .doc(_firebaseAuth.currentUser!.uid)
+        .get();
+    return documentSnapshot;
+  }
 }
