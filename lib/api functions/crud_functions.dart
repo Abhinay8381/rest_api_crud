@@ -7,7 +7,7 @@ const String baseUrl = "https://api.nstack.in/v1/todos";
 class CrudFunctions {
   var client = http.Client();
 
-  //to get all the booking ids booked from you(get)
+  //to get the booking details from booking id(get)
   Future<dynamic> getBookingfromID(String id) async {
     var url = Uri.parse("$baseUrl/$id");
 
@@ -35,6 +35,7 @@ class CrudFunctions {
     }
   }
 
+  // to update booking from booking id and new booking details(put)
   Future<dynamic> updateBooking(String id, dynamic object) async {
     var url = Uri.parse("$baseUrl/$id");
     var response = await client.put(
@@ -51,6 +52,7 @@ class CrudFunctions {
       return "Something went wrong";
     }
   }
+  //to delete booking from booking if(delete)
 
   Future<dynamic> deleteBooking(String id) async {
     var url = Uri.parse("$baseUrl/$id");

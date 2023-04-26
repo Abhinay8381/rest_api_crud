@@ -129,6 +129,7 @@ class _ShowBookingScreenState extends State<ShowBookingScreen> {
     return bookings;
   }
 
+//calculating amount based on checkin and checkout date
   int amountDueCalculator(bool isAC, DateTime checkin, DateTime checkout) {
     if (isAC) {
       return ((checkout.difference(checkin)).inDays) * 1299;
@@ -137,6 +138,7 @@ class _ShowBookingScreenState extends State<ShowBookingScreen> {
     }
   }
 
+// widget shown when there are no bookings
   noBookingsWidget() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),

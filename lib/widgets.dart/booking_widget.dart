@@ -201,11 +201,13 @@ class _BookingWidgetState extends State<BookingWidget> {
           );
   }
 
+  //converting date to desired format
   String dateConverter(String dateInISO8601) {
     DateTime dateTime = DateTime.parse(dateInISO8601);
     return DateFormat.yMMMd().format(dateTime);
   }
 
+// calculating amount based on room type check in and check out
   int amountDueCalculator(bool isAC, DateTime checkin, DateTime checkout) {
     if (isAC) {
       return ((checkout.difference(checkin)).inDays) * 1299;
@@ -214,11 +216,13 @@ class _BookingWidgetState extends State<BookingWidget> {
     }
   }
 
+  //converting date to desired format
   String dateTimeFormatter(String date) {
     DateTime dateTime = DateTime.parse(date);
     return DateFormat('MMMM d, y h:mm a').format(dateTime);
   }
 
+// deleting booking from booking id
   deleteBookting() async {
     setState(() {
       _isLoading = true;
@@ -231,6 +235,7 @@ class _BookingWidgetState extends State<BookingWidget> {
         _isLoading = false;
       });
     } else {
+      //deleting booking id from user document
       await Firestorefunctions().deleteIDs(widget.bookingId);
       // ignore: use_build_context_synchronously
       showSnackBar(context, "Booking deleted successfully", Colors.green);

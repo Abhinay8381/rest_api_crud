@@ -364,6 +364,7 @@ class _BookingScreenState extends State<BookingScreen> {
     );
   }
 
+// date picking for check in
   Future<void> _selectCheckInDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -378,6 +379,7 @@ class _BookingScreenState extends State<BookingScreen> {
     }
   }
 
+// date picking for checkout
   Future<void> _selectCheckOutDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -392,6 +394,7 @@ class _BookingScreenState extends State<BookingScreen> {
     }
   }
 
+  //creating booking
   createBooking() async {
     final ip = context.read<InternetProvider>();
     await ip.checkInternetConnection();
@@ -416,6 +419,7 @@ class _BookingScreenState extends State<BookingScreen> {
             bookingController.reset();
           } else {
             String id = ((jsonDecode(value))['data'])['_id'];
+            //adding the recieved response id to user document
             await Firestorefunctions().addID(id);
             showSnackBar(context, "Booking Successful", Colors.green);
             bookingController.success();

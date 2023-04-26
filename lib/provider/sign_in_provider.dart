@@ -126,6 +126,7 @@ class SignInProvider extends ChangeNotifier {
       "email": _email,
       "uid": _uid,
       "image_url": _imageUrl,
+      "BookingIDs": [],
     });
     notifyListeners();
   }

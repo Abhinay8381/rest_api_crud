@@ -387,6 +387,7 @@ class _UpdateBookingScreenState extends State<UpdateBookingScreen> {
     );
   }
 
+  // date picking for check in
   Future<void> _selectCheckInDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -401,6 +402,7 @@ class _UpdateBookingScreenState extends State<UpdateBookingScreen> {
     }
   }
 
+// date picking for check out
   Future<void> _selectCheckOutDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -415,6 +417,7 @@ class _UpdateBookingScreenState extends State<UpdateBookingScreen> {
     }
   }
 
+  // updating the booking data from a particular booking id
   updateBooking() async {
     final ip = context.read<InternetProvider>();
     await ip.checkInternetConnection();
@@ -436,6 +439,7 @@ class _UpdateBookingScreenState extends State<UpdateBookingScreen> {
             checkin: widget.checkInDate.toIso8601String(),
             checkout: widget.checkOutDate.toIso8601String());
         debugPrint(widget.checkOutDate.toIso8601String());
+        //calling the put function to update data
         CrudFunctions()
             .updateBooking(widget.bookingId, bookingModel)
             .then((value) async {
