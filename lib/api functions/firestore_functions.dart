@@ -20,4 +20,13 @@ class Firestorefunctions {
         .get();
     return documentSnapshot;
   }
+
+  deleteIDs(String id) async {
+    await _firebaseFirestore
+        .collection("users")
+        .doc(_firebaseAuth.currentUser!.uid)
+        .update({
+      "BookingIDs": FieldValue.arrayRemove([id]),
+    });
+  }
 }

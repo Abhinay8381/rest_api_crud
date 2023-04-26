@@ -1,30 +1,36 @@
-// ignore_for_file: use_build_context_synchronously
-
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:rest_api_crud/api%20functions/crud_functions.dart';
-import 'package:rest_api_crud/api%20functions/firestore_functions.dart';
-import 'package:rest_api_crud/models/booking_model.dart';
-import 'package:rest_api_crud/utils/utils.dart';
-import 'package:rounded_loading_button/rounded_loading_button.dart';
-import '../provider/internet_provider.dart';
+import 'package:rest_api_crud/screens/home_screen.dart';
 
-class BookingScreen extends StatefulWidget {
-  const BookingScreen({super.key});
+import 'package:rounded_loading_button/rounded_loading_button.dart';
+
+import '../api functions/crud_functions.dart';
+import '../models/booking_model.dart';
+import '../provider/internet_provider.dart';
+import '../utils/utils.dart';
+
+class UpdateBookingScreen extends StatefulWidget {
+  String bookingId;
+  DateTime checkInDate;
+  DateTime checkOutDate;
+  String roomType;
+  int amount;
+  UpdateBookingScreen(
+      {super.key,
+      required this.bookingId,
+      required this.checkInDate,
+      required this.checkOutDate,
+      required this.amount,
+      required this.roomType});
 
   @override
-  State<BookingScreen> createState() => _BookingScreenState();
+  State<UpdateBookingScreen> createState() => _UpdateBookingScreenState();
 }
 
-class _BookingScreenState extends State<BookingScreen> {
-  DateTime checkInDate = DateTime.now();
-  DateTime checkOutDate = DateTime.now().add(const Duration(days: 1));
-  int amount = 1299;
-  String roomType = "AC";
+class _UpdateBookingScreenState extends State<UpdateBookingScreen> {
   final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
-  final RoundedLoadingButtonController bookingController =
+  final RoundedLoadingButtonController updateBookingController =
       RoundedLoadingButtonController();
 
   @override
@@ -35,12 +41,11 @@ class _BookingScreenState extends State<BookingScreen> {
         elevation: 0,
         backgroundColor: Theme.of(context).primaryColor,
         centerTitle: true,
-        automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: const [
             Text(
-              'Welcome',
+              'Update Your Booking',
               textAlign: TextAlign.left,
               style: TextStyle(
                   color: mobileBackgroundColor,
@@ -141,20 +146,28 @@ class _BookingScreenState extends State<BookingScreen> {
                   onTap: () async {
                     await _selectCheckInDate(context);
                     setState(() {
-                      checkOutDate = checkInDate.add(const Duration(days: 1));
-                      if (checkOutDate.difference(checkInDate).inDays < 0) {
-                        amount = 0;
+                      widget.checkOutDate =
+                          widget.checkInDate.add(const Duration(days: 1));
+                      if (widget.checkOutDate
+                              .difference(widget.checkInDate)
+                              .inDays <
+                          0) {
+                        widget.amount = 0;
                         showSnackBar(
                             context,
                             "Check Out Date Should Be Greater Then Check in Date",
                             Colors.red);
                       } else {
-                        if (roomType == "AC") {
-                          amount = checkOutDate.difference(checkInDate).inDays *
+                        if (widget.roomType == "AC") {
+                          widget.amount = widget.checkOutDate
+                                  .difference(widget.checkInDate)
+                                  .inDays *
                               1299;
                         } else {
-                          amount =
-                              checkOutDate.difference(checkInDate).inDays * 799;
+                          widget.amount = widget.checkOutDate
+                                  .difference(widget.checkInDate)
+                                  .inDays *
+                              799;
                         }
                       }
                     });
@@ -173,7 +186,8 @@ class _BookingScreenState extends State<BookingScreen> {
                             padding: const EdgeInsets.fromLTRB(15, 8, 15, 8),
                             child: Text.rich(TextSpan(children: [
                               TextSpan(
-                                text: DateFormat.yMMMd().format(checkInDate),
+                                text: DateFormat.yMMMd()
+                                    .format(widget.checkInDate),
                                 style: const TextStyle(
                                     color: Colors.black, fontSize: 20),
                               ),
@@ -201,19 +215,27 @@ class _BookingScreenState extends State<BookingScreen> {
                 child: InkWell(
                   onTap: () async {
                     await _selectCheckOutDate(context);
-                    if (checkOutDate.difference(checkInDate).inDays < 0) {
-                      amount = 0;
+                    if (widget.checkOutDate
+                            .difference(widget.checkInDate)
+                            .inDays <
+                        0) {
+                      widget.amount = 0;
+                      // ignore: use_build_context_synchronously
                       showSnackBar(
                           context,
                           "Check Out Date Should Be Greater Then Check in Date",
                           Colors.red);
                     } else {
-                      if (roomType == "AC") {
-                        amount =
-                            checkOutDate.difference(checkInDate).inDays * 1299;
+                      if (widget.roomType == "AC") {
+                        widget.amount = widget.checkOutDate
+                                .difference(widget.checkInDate)
+                                .inDays *
+                            1299;
                       } else {
-                        amount =
-                            checkOutDate.difference(checkInDate).inDays * 799;
+                        widget.amount = widget.checkOutDate
+                                .difference(widget.checkInDate)
+                                .inDays *
+                            799;
                       }
                     }
                   },
@@ -231,7 +253,8 @@ class _BookingScreenState extends State<BookingScreen> {
                             padding: const EdgeInsets.fromLTRB(15, 8, 15, 8),
                             child: Text.rich(TextSpan(children: [
                               TextSpan(
-                                text: DateFormat.yMMMd().format(checkOutDate),
+                                text: DateFormat.yMMMd()
+                                    .format(widget.checkOutDate),
                                 style: const TextStyle(
                                     color: Colors.black, fontSize: 20),
                               ),
@@ -275,18 +298,18 @@ class _BookingScreenState extends State<BookingScreen> {
                             style: TextStyle(fontSize: 20),
                           ),
                           value: 'AC',
-                          groupValue: roomType,
+                          groupValue: widget.roomType,
                           onChanged: (value) {
                             setState(() {
-                              roomType = value.toString();
-                              if (roomType == "AC") {
-                                amount = checkOutDate
-                                        .difference(checkInDate)
+                              widget.roomType = value.toString();
+                              if (widget.roomType == "AC") {
+                                widget.amount = widget.checkOutDate
+                                        .difference(widget.checkInDate)
                                         .inDays *
                                     1299;
                               } else {
-                                amount = checkOutDate
-                                        .difference(checkInDate)
+                                widget.amount = widget.checkOutDate
+                                        .difference(widget.checkInDate)
                                         .inDays *
                                     799;
                               }
@@ -303,18 +326,18 @@ class _BookingScreenState extends State<BookingScreen> {
                             style: TextStyle(fontSize: 20),
                           ),
                           value: 'Non AC',
-                          groupValue: roomType,
+                          groupValue: widget.roomType,
                           onChanged: (value) {
                             setState(() {
-                              roomType = value.toString();
-                              if (roomType == "AC") {
-                                amount = checkOutDate
-                                        .difference(checkInDate)
+                              widget.roomType = value.toString();
+                              if (widget.roomType == "AC") {
+                                widget.amount = widget.checkOutDate
+                                        .difference(widget.checkInDate)
                                         .inDays *
                                     1299;
                               } else {
-                                amount = checkOutDate
-                                        .difference(checkInDate)
+                                widget.amount = widget.checkOutDate
+                                        .difference(widget.checkInDate)
                                         .inDays *
                                     799;
                               }
@@ -331,9 +354,9 @@ class _BookingScreenState extends State<BookingScreen> {
               ),
               RoundedLoadingButton(
                 onPressed: () {
-                  createBooking();
+                  updateBooking();
                 },
-                controller: bookingController,
+                controller: updateBookingController,
                 successColor: Colors.black,
                 width: MediaQuery.of(context).size.width * 0.80,
                 elevation: 0,
@@ -341,7 +364,7 @@ class _BookingScreenState extends State<BookingScreen> {
                 color: primaryColor,
                 child: Wrap(
                   children: [
-                    const Text("Book now & pay at hotel",
+                    const Text("Edit your booking",
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
@@ -349,7 +372,7 @@ class _BookingScreenState extends State<BookingScreen> {
                     const SizedBox(
                       width: 15,
                     ),
-                    Text("(₹ $amount)",
+                    Text("(₹ ${widget.amount})",
                         style: const TextStyle(
                             color: Colors.white,
                             fontSize: 16,
@@ -373,7 +396,7 @@ class _BookingScreenState extends State<BookingScreen> {
     );
     if (picked != null) {
       setState(() {
-        checkInDate = picked;
+        widget.checkInDate = picked;
       });
     }
   }
@@ -387,38 +410,42 @@ class _BookingScreenState extends State<BookingScreen> {
     );
     if (picked != null) {
       setState(() {
-        checkOutDate = picked;
+        widget.checkOutDate = picked;
       });
     }
   }
 
-  createBooking() async {
+  updateBooking() async {
     final ip = context.read<InternetProvider>();
     await ip.checkInternetConnection();
 
     if (ip.hasInternet == false) {
+      // ignore: use_build_context_synchronously
       showSnackBar(context, "Check your Internet connection", Colors.red);
-      bookingController.reset();
+      updateBookingController.reset();
     } else {
-      if (checkOutDate.difference(checkInDate).inDays < 0) {
-        amount = 0;
+      if (widget.checkOutDate.difference(widget.checkInDate).inDays < 0) {
+        widget.amount = 0;
 
+        // ignore: use_build_context_synchronously
         showSnackBar(context,
             "Check Out Date Should Be Greater Then Check in Date", Colors.red);
       } else {
         BookingModel bookingModel = BookingModel(
-            isAC: roomType == "AC",
-            checkin: checkInDate.toIso8601String(),
-            checkout: checkOutDate.toIso8601String());
-        CrudFunctions().createBooking("", bookingModel).then((value) async {
+            isAC: widget.roomType == "AC",
+            checkin: widget.checkInDate.toIso8601String(),
+            checkout: widget.checkOutDate.toIso8601String());
+        debugPrint(widget.checkOutDate.toIso8601String());
+        CrudFunctions()
+            .updateBooking(widget.bookingId, bookingModel)
+            .then((value) async {
           if (value == "Something went wrong") {
             showSnackBar(context, value, Colors.red);
-            bookingController.reset();
+            updateBookingController.reset();
           } else {
-            String id = ((jsonDecode(value))['data'])['_id'];
-            await Firestorefunctions().addID(id);
-            showSnackBar(context, "Booking Successful", Colors.green);
-            bookingController.success();
+            showSnackBar(context, "Booking updated successfully", Colors.green);
+            updateBookingController.success();
+            nextScreenReplacement(context, const HomeScreen());
           }
         });
       }

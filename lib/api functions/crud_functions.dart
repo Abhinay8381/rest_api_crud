@@ -34,4 +34,34 @@ class CrudFunctions {
       return "Something went wrong";
     }
   }
+
+  Future<dynamic> updateBooking(String id, dynamic object) async {
+    var url = Uri.parse("$baseUrl/$id");
+    var response = await client.put(
+      url,
+      body: jsonEncode(object),
+      headers: {
+        'Content-Type': 'application/json',
+        'accept': 'application/json'
+      },
+    );
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      return "Something went wrong";
+    }
+  }
+
+  Future<dynamic> deleteBooking(String id) async {
+    var url = Uri.parse("$baseUrl/$id");
+    var response = await client.delete(
+      url,
+      headers: {'accept': 'application/json'},
+    );
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      return "Something went wrong";
+    }
+  }
 }
