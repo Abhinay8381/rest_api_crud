@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 20,
                       ),
                       Text(
-                        "Hotel booking using restful-booker API",
+                        "Hotel booking using Swagger UI API",
                         style: TextStyle(fontSize: 15, color: Colors.grey[600]),
                       )
                     ],
