@@ -51,7 +51,7 @@ class _ShowBookingScreenState extends State<ShowBookingScreen> {
             appBar: AppBar(
               automaticallyImplyLeading: false,
               title: const Text(
-                "Profile",
+                "Bookings",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
               elevation: 0,
